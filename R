@@ -6,7 +6,7 @@ lapply(packages, library, character.only = TRUE)
 
 # load dataset
 
-ETHUSD_TradingHistory <- read_csv("/Users/patriecaking/Documents/R/Datasets/ETH-USD Data/TradingHistory_ETH-USD.csv")
+ETHUSD_TradingHistory <- read_csv("ETH-USD Data/TradingHistory_ETH-USD.csv")
 
 # convert timestamp column from UNIX to POSIXct and name new column Trade_DateTime
 
@@ -28,7 +28,53 @@ ETHUSD_2021Trades$Time <- format(as.POSIXct(ETHUSD_2021TradeDates$Trade_DateTime
 
 ETHUSD_2021Trades <- subset (ETHUSD_2021Trades, select = -c(timestamp, Trade_DateTime))
 
-# separate date column into three columns: year, month, day
+# save data to file
 
-ETHUSD_2021Trades <- ETHUSD_2021Trades %>%
-separate(Date, c("Year", "Month", "Day"), sep = "-")
+write_csv(ETHUSD_2021Trades_clean, file = "ETHUSD_2021Trades_clean.csv")
+
+clean_data <- read_csv(file = "ETHUSD_2021Trades_clean.csv")
+
+# find the trade with the highest trade volume
+
+clean_data[which.max(clean_data$volume),]
+
+# find the trade with the lowest trade volume
+
+clean_data[which.min(clean_data$volume),]
+
+# find the trade with the highest price
+
+clean_data[which.max(clean_data$price),]
+
+# find the trade with the lowest price
+
+clean_data[which.min(clean_data$price),]
+
+# find the average trade volume traded each day
+
+avg_trade_volume_per_day <- clean_data %>%
+  group_by(Date) %>% 
+  summarize(mean_trade_volume_per_day = mean(volume))
+
+# find the average price of daily trades
+
+avg_trade_price_per_day <- clean_data %>% 
+  group_by(Date) %>% 
+  summarize(mean_daily_trade_price = mean(price))
+
+# find the number of trades per day
+
+n_trades_per_day <- clean_data %>% 
+  group_by(Date) %>% 
+  tally()
+  
+# find the average number of trades per day
+
+mean(n_trades_per_day$n)
+
+# find the average price of trades per day?
+
+mean(clean_data$price)
+
+## VISUALIZATION
+
