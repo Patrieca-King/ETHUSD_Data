@@ -88,4 +88,9 @@ ETHUSDTradePlot_hc <- clean_data %>%
   geom_line(size = 0.2) +
   labs(caption = "ETHUSD Trade Prices Throughout 2021",
        y = "Price") +
-  theme_hc()
+  theme_hc() +
+  theme(text=element_text(size = 16))
+  
+# save this plot to file
+
+ggsave("2021_ETHUSDTrades_plot_hc_theme.png", ETHUSDTradePlot_hc, width = 15, height = 10)
