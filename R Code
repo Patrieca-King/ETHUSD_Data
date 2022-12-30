@@ -32,6 +32,8 @@ ETHUSD_2021Trades <- subset (ETHUSD_2021Trades, select = -c(timestamp, Trade_Dat
 
 write_csv(ETHUSD_2021Trades_clean, file = "ETHUSD_2021Trades_clean.csv")
 
+# read file and explore data
+
 clean_data <- read_csv(file = "ETHUSD_2021Trades_clean.csv")
 
 # find the trade with the highest trade volume
@@ -72,9 +74,18 @@ n_trades_per_day <- clean_data %>%
 
 mean(n_trades_per_day$n)
 
-# find the average price of trades per day?
+# find the average price of trades per day
 
 mean(clean_data$price)
 
 ## VISUALIZATION
 
+install.packages("ggthemes") 
+library(ggthemes) 
+
+ETHUSDTradePlot_hc <- clean_data %>% 
+  ggplot(aes(Date, price)) +
+  geom_line(size = 0.2) +
+  labs(caption = "ETHUSD Trade Prices Throughout 2021",
+       y = "Price") +
+  theme_hc()
